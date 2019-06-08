@@ -1,6 +1,8 @@
 Ray Tracing in One Weekend
 ====================================================================================================
 
+Code ported to GPU using CUDA
+
 ![Ray Tracing in One Weekend](./RTOneWeekend.jpg)
 
 ## Getting the Book
