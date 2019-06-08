@@ -8,6 +8,7 @@
 // You should have received a copy (see file COPYING.txt) of the CC0 Public Domain Dedication along
 // with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 //==================================================================================================
+// Portado para GPU por Luciano Soares <lpsoares@gmail.com>
 
 #ifndef HITABLEH
 #define HITABLEH 
@@ -28,7 +29,8 @@ struct hit_record
 
 class hitable  {
     public:
-        virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const = 0;
+        //__device__ __host__ virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const = 0;
+
 };
 
 #endif

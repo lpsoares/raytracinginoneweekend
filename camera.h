@@ -8,22 +8,24 @@
 // You should have received a copy (see file COPYING.txt) of the CC0 Public Domain Dedication along
 // with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 //==================================================================================================
+// Portado para GPU por Luciano Soares <lpsoares@gmail.com>
 
 #ifndef CAMERAH
 #define CAMERAH
 #include "ray.h"
 
-vec3 random_in_unit_disk() {
+__device__ __host__ vec3 random_in_unit_disk() {
     vec3 p;
     do {
-        p = 2.0*vec3(drand48(),drand48(),0) - vec3(1,1,0);
+        //p = 2.0*vec3(drand48(),drand48(),0) - vec3(1,1,0);
+        p = 2.0*vec3(0.5,0.5,0) - vec3(1,1,0);
     } while (dot(p,p) >= 1.0);
     return p;
 }
 
 class camera {
     public:
-        camera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float aspect, float aperture, float focus_dist) { // vfov is top to bottom in degrees
+        __device__ __host__ camera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float aspect, float aperture, float focus_dist) { // vfov is top to bottom in degrees
             lens_radius = aperture / 2;
             float theta = vfov*M_PI/180;
             float half_height = tan(theta/2);
@@ -36,7 +38,7 @@ class camera {
             horizontal = 2*half_width*focus_dist*u;
             vertical = 2*half_height*focus_dist*v;
         }
-        ray get_ray(float s, float t) {
+        __device__ __host__ ray get_ray(float s, float t) {
             vec3 rd = lens_radius*random_in_unit_disk();
             vec3 offset = u * rd.x() + v * rd.y();
             return ray(origin + offset, lower_left_corner + s*horizontal + t*vertical - origin - offset); 

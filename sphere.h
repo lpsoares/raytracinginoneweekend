@@ -8,6 +8,7 @@
 // You should have received a copy (see file COPYING.txt) of the CC0 Public Domain Dedication along
 // with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 //==================================================================================================
+// Portado para GPU por Luciano Soares <lpsoares@gmail.com>
 
 #ifndef SPHEREH
 #define SPHEREH
@@ -18,13 +19,15 @@ class sphere: public hitable  {
     public:
         sphere() {}
         sphere(vec3 cen, float r, material *m) : center(cen), radius(r), mat_ptr(m)  {};
-        virtual bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const;
+        //__device__ __host__ virtual bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const;
+        __device__ __host__ bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const;
         vec3 center;
         float radius;
         material *mat_ptr;
 };
 
-bool sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
+__device__ __host__ bool sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
+
     vec3 oc = r.origin() - center;
     float a = dot(r.direction(), r.direction());
     float b = dot(oc, r.direction());
@@ -50,7 +53,6 @@ bool sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const 
     }
     return false;
 }
-
 
 #endif
 
